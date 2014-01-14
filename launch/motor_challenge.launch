@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<launch>
+    <node pkg="motor_challenge" type="motor_challenge_node" name="motor_challenge" output="screen"/>
+</launch>
