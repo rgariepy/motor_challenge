@@ -15,7 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   MotorStatus.msg
-  EncoderStatus.msg
+  EncoderData.msg
 )
 
 generate_messages(
@@ -37,10 +37,16 @@ catkin_package(
 ###########
 
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
 add_executable(motor_challenge_node src/motor_challenge_node.cpp)
+
+target_link_libraries(motor_challenge_node
+    ${catkin_LIBRARIES}
+)
+
 
 #############
 ## Install ##
