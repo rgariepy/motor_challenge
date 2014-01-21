@@ -1,4 +1,10 @@
 <?xml version="1.0" ?>
 <launch>
+    <param name="robot_width" value="1.0"/> <!-- [m] -->
+    <param name="wheel_rad" value="0.2"/>   <!-- [m] -->
+    <param name="enc_ticks" value="1024"/>  <!-- [ticks/rev] Encoder ticks per revolution -->
+    <param name="K_v" value="5"/>   <!-- [V/rad/s] Motor constant, assuming K_t is equal when using SI units -->
+    <param name="R" value="0.5"/>   <!-- [ohm] Motor winding resistance -->
+
     <node pkg="motor_challenge" type="motor_challenge_node" name="motor_challenge" output="screen"/>
 </launch>
