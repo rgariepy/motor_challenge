@@ -1,4 +1,5 @@
 /**
+ * 
 Software License Agreement (BSD)
 
 \file      motor_challenge_node.h
@@ -30,6 +31,45 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 #include <geometry_msgs/Twist.h>
 #include "motor_challenge/EncoderData.h"
 #include "motor_challenge/MotorStatus.h"
+#include <queue>
+
+/**
+*  Following class implements an estimation of the variance of the data set based on n samples from the data.
+*/
+class SampleVarianceFilter
+{
+private:
+    size_t population_size_;
+    std::queue<double> samples;
+    double sum;
+public:
+    SampleVarianceFilter():
+        population_size_(1)
+    {}
+    void setSize(size_t population_size)
+    {
+        population_size_=population_size;
+    }
+    void add(double sample)
+    {
+        //time window sum using a queue
+        samples.push(sample);
+        sum+=samples.back();
+
+         if (samples.size()>population_size_)
+         {
+         sum-=samples.front();
+         samples.pop();
+         }
+    }
+
+    double getVariance()
+    {
+        return sum/(static_cast<double>(samples.size())-1.0);
+
+    }
+};
+
 
 class EncodersMonitor {
 public:
@@ -42,10 +82,37 @@ public:
   void twistCallback(const geometry_msgs::TwistConstPtr&);
 
 protected:
+  double robot_width_;     // [m]
+  double wheel_rad_;       // [m]
+  int enc_ticks_;       // [ticks/rev] Encoder ticks per revolution
+  double K_v_;             // [V/rad/s] Motor constant, assuming K_t is equal when using SI units
+  double R_;               // [ohm] Motor winding resistance
+  motor_challenge::EncoderData enc_data_;
+  double time_enc_state_;  // [s] used for determining velocity
+  motor_challenge::MotorStatus motor_status_;
+  geometry_msgs::Twist twist_robot_0_;
+  double left_velocity_;   // [m/s] linear velocity of the left wheel at point of contact with the ground
+  double right_velocity_;  // [m/s] linear velocity of the right wheel at point of contact with  the ground
+
+
+  double num_samples;       // number of samples used to estimate variance of the encoder data
+  double encoder_variance;  // maximum allowed variance of the encoder data
+
+  SampleVarianceFilter variance_left;
+  SampleVarianceFilter variance_right;
+
+  bool right_enc_ok;
+  bool left_enc_ok;
+  void updateEncoderStatus();
+
   ros::Subscriber sub_encoders_; 
   ros::Subscriber sub_motors_; 
   ros::Subscriber sub_twist_; 
-  ros::Publisher pub_status_;
+  ros::Publisher  pub_status_;
+#ifndef DEBUG
+  ros::Publisher  pub_debug_;
+#endif /*DEBUG*/
 };
+
 
 #endif

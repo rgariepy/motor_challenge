@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(motor_challenge)
 
+set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_C_FLAGS_DEBUG "-DDEBUG")
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
@@ -16,6 +18,7 @@ add_message_files(
   FILES
   MotorStatus.msg
   EncoderData.msg
+  EncoderStatus.msg
 )
 
 generate_messages(

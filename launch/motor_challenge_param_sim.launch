@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<launch>
+    <param name="robot_width" value="1.0"/> <!-- [m] -->
+    <param name="wheel_rad" value="0.2"/>   <!-- [m] -->
+    <param name="enc_ticks" value="1024"/>  <!-- [ticks/rev] Encoder ticks per revolution -->
+    <param name="K_v" value="5"/>   <!-- [V/rad/s] Motor constant, assuming K_t is equal when using SI units -->
+    <param name="R" value="0.5"/>   <!-- [ohm] Motor winding resistance -->
+    <param name="num_samples" value="10" />  <!--number of samples used to estimate variance of the measured encoder signal is computed -->
+    <param name="encoder_variance" value="0.03" /> <!-- Maximum allowed variance in the estimate of linear velocity of the wheels -->
+    <param name="use_sim_time" value="true" /> <!-- simulation time is required for correct numerical diff while using rosbag play option -->
+
+    <node pkg="motor_challenge" type="motor_challenge_node" name="motor_challenge" output="screen"/>
+    <!-- data plots to ease understanding of signal processing results -->
+    <include file="$(find motor_challenge)/launch/plots.launch" />
+</launch>
