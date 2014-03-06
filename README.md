@@ -26,3 +26,9 @@ roslaunch motor_challenge motor_challenge.launch
 ## Provided data and parameters
 Some parameters of the "robot" used to generate the data can be found in the motor_challenge.launch file.  
 A bag file containing sample data (with encoder faults) can be found in motor_challenge/bags/ and can be played back using the "rosbag" utility.  
+
+## Testing
+The node is to be tested for:
++ Responce time
++ Robustness, e.g. noise tolerance
+The tests can be peformed using a model of robot with simulated faults. Difference between start of fault simulation and actual detection provide response time.  Robustenss is tested by using different noise level in measuremnts   with comparing allowed probabilty of the false positive detection.
